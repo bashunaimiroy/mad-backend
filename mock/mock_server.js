@@ -13,9 +13,9 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 // sends array of 12 artist objects
 // will need some kind of function in order to randomize/specify the band objects that are sent back
-app.get("/api/bands", (req, res) => {
+app.get("/api/bands/:page", (req, res) => {
     console.log('headers are',req.headers);
-    const page = Number(req.param('page'));
+    const page = Number(req.params.page);
     const start = page*12
     const end = start+12
     console.log('start:',start,'start',end )
