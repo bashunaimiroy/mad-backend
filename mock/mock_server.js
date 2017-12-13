@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 const bodyParser = require("body-parser")
-const bands = require("./bands.json")
+const bands = require("./new-bands.json")
 const morgan = require("morgan")
 const cors = require("cors")
 
@@ -12,8 +12,15 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => res.send('Hello World!')) 
 
 // sends array of 12 artist objects
-// will need some kind of function in order to randomize the band objects that are sent back
-app.get("/api/bands", (req, res) => res.status(200).json(bands.slice(0,12)))
+// will need some kind of function in order to randomize/specify the band objects that are sent back
+app.get("/api/bands", (req, res) => {
+    console.log('headers are',req.headers);
+    const page = Number(req.headers.page);
+    const start = page*12
+    const end = start+12
+    console.log('start:',start,'start',end )
+    res.status(200).json(bands.slice(start, end))
+})
 
 //sends back one artist object
 app.get("/api/bands/:id", (req, res) => res.status(200).json({
