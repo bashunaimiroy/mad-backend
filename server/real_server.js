@@ -24,14 +24,13 @@ function InitializeApp(dataLoader) {
     app.use(cors())
     app.use(bodyParser.urlencoded({ extended: false }))
 
-    app.get('/', (req, res) => res.send("We're Live at Express!"))
+    app.get('/', (req, res) => res.send("Bashu's Server is running!"))
 
 
     
     app.get("/api/v1/bands/", (req, res) => {
         console.log("received 12-band request. IDs are", req.query)
-        req.query.bandIdArray
-        console.log("string is",bandIdArray)
+        console.log("string is",req.query.bandIdArray)
         dataLoader.getBands(req.query.bandIdArray).then(bands => {
             console.log("we found bands:", bands);
 
