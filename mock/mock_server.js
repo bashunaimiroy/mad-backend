@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 const bodyParser = require("body-parser")
-const bands = require("./new-bands.json")
+const bands = require("../data/new-bands.json")
 const morgan = require("morgan")
 const cors = require("cors")
 
@@ -41,7 +41,4 @@ app.get("/api/bands/:id", (req, res) => res.status(200).json({
     "Band Members": "Robben Lent\nGeorgia Gleason\nJordan Siemens\nAlan McTavish"
 }))
 
-
-
-
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+app.listen(process.env.PORT || 3000, () => console.log('Example app listening on port 3000!'))
