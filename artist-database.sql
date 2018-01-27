@@ -14,6 +14,7 @@ CREATE TABLE admin (
 
 CREATE TABLE bands (
     band_id INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    admin_genre VARCHAR(50),
     band_name VARCHAR(100) NOT NULL,
     band_genre VARCHAR(100),
     music_link VARCHAR(100),
