@@ -29,6 +29,11 @@ function InitializeApp(dataLoader) {
         let {genre,searchterm}=req.query
         console.log("band_IDs requested. Genre:",genre,"searchterm:",searchterm);
         dataLoader.getIDs(genre,searchterm).then(bandIdArray=>res.status(200).json(bandIdArray))
+        .catch(err => {
+            console.log("error retrieving band IDs:", err.code,err.sqlMessage+ ". SQL query was:", err.sql)
+            return res.status(500).json(err)
+
+        })
     })
 
     app.get("/api/v1/bands/", (req, res) => {
@@ -37,6 +42,10 @@ function InitializeApp(dataLoader) {
             console.log("we found bands");
 
             return res.status(200).json(bands)
+        }).catch(err => {
+            console.log("error retrieving bands:", err.code,err.sqlMessage, ". SQL query was:",err.sql)
+            return res.status(500).json(err)
+
         })
     })
 
