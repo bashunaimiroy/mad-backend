@@ -26,8 +26,9 @@ function InitializeApp(dataLoader) {
 
 
     app.get("/api/v1/genreIDs", (req,res)=>{
-        console.log("band_IDs for ",req.query.genre," requested. Fetching..");
-        dataLoader.getIDs(req.query.genre).then(bandIdArray=>res.status(200).json(bandIdArray))
+        let {genre,searchterm}=req.query
+        console.log("band_IDs requested. Genre:",genre,"searchterm:",searchterm);
+        dataLoader.getIDs(genre,searchterm).then(bandIdArray=>res.status(200).json(bandIdArray))
     })
 
     app.get("/api/v1/bands/", (req, res) => {
