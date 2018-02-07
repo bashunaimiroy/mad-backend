@@ -1,3 +1,5 @@
 /node_modules
 secretURLS.txt
 .env
+/data
+.gitignore

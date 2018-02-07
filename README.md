@@ -1,12 +1,11 @@
 # mtl-artist-database-backend
 
-### Mockup Version
-Docs for front-end
+Tech overview of this app:
+    MySQL database
+    Node.js backend using Express.Js,Knex.js,and promise-mysql
 
-There are currently two endpoints: 
+API Endpoints:
+    TBD
 
-* /api/bands/:page accepts a GET with :page equal the page number. It sends back 12 artist objects
-
-* /api/bands/:id accepts a GET and sends back one artist object
-
-Happy hacking! 
+Security: 
+    protect against SQL Injection by parameterising SQL queries in Knex
