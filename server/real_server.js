@@ -33,7 +33,7 @@ function InitializeApp(dataLoader) {
                 console.log(`error retrieving IDs: 
                 ${err.code} ${err.sqlMessage} 
                 SQL query was ${err.sql}`);
-                return res.status(500).json("Error retrieving bands. Sorry")
+                return res.status(500).json("Error retrieving IDs. Sorry")
 
             })
     })
@@ -60,7 +60,7 @@ function InitializeApp(dataLoader) {
                 console.log(`error retrieving bands: 
                         ${err.code} ${err.sqlMessage} 
                         SQL query was ${err.sql}`)
-                return res.status(500).json("Error retrieving Band Data Object. Sorry")
+                return res.status(500).json("Error retrieving Bands. Sorry")
 
             })
         })
