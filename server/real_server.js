@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 require('dotenv').config();
+const helmet = require("helmet")
 const bodyParser = require("body-parser")
 const morgan = require("morgan")
 const cors = require("cors")
@@ -17,12 +18,12 @@ const connection = mysql.createConnection(databaseUrl)
 
 function InitializeApp(dataLoader) {
     console.log("starting server.")
-
+    app.use(helmet())
     app.use(morgan('dev'))
     app.use(cors())
     app.use(bodyParser.urlencoded({ extended: false }))
 
-    app.get('/', (req, res) => res.send("Bashu's Server is running!"))
+    app.get('/', (req, res) => res.send("You have reached the Montreal Artist Database back-end. Try an endpoint!"))
 
 
     app.get("/api/v1/genreIDs", (req, res) => {

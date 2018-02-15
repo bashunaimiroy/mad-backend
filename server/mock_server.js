@@ -5,7 +5,6 @@ const bands = require("../data/new-bands.json")
 const morgan = require("morgan")
 const cors = require("cors")
 const mysql = require('promise-mysql')
-const qs = require("querystring")
 const { databaseUrl } = require("../data/config.js")
 const journalDataLoader = require("../lib/dataLoader.js")
 
