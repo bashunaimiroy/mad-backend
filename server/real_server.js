@@ -6,10 +6,11 @@ const bodyParser = require("body-parser")
 const morgan = require("morgan")
 const cors = require("cors")
 const mysql = require('promise-mysql')
+const superagent = require('superagent')
 //the first environment variable is local to Heroku, the second is in a local .env file for development
 const databaseUrl = process.env.CLEARDB_DATABASE_URL || process.env.LOCAL_DATABASE_URL
 const dataLoader = require("../lib/dataLoader.js")
-
+console.log(process.env)
 console.log("database URL is", databaseUrl, ". connecting now")
 
 //this next part first makes the connection to the database, 
@@ -28,7 +29,15 @@ function initializeApp(dataLoader) {
 
     app.get('/', (req, res) => res.send("You have reached the Montreal Artist Database back-end. Try an endpoint!"))
 
-
+    app.post('/api/v1/newsletter-subscribe',(req,res)=>{
+        let email = req.body.email
+        superagent.post('https://us18.api.mailchimp.com/3.0/lists/06f3863bc7/members')
+        .send(
+            {email_address:email,status:'subscribed'}
+        )
+        .auth('mad-backend','0839fa0ca24ab9e2c3b10bcc5713bb91-us18')
+        .then(response=>res.json(response));
+    })
     app.get("/api/v1/genreIDs", (req, res) => {
         let { genre, searchterm } = req.query
         console.log("band_IDs requested. Genre:", genre, "searchterm:", searchterm);
