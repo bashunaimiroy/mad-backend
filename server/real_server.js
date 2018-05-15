@@ -36,7 +36,11 @@ function initializeApp(dataLoader) {
             {email_address:email,status:'subscribed'}
         )
         .auth('mad-backend','0839fa0ca24ab9e2c3b10bcc5713bb91-us18')
-        .then(response=>res.json(response));
+        .then(response=>res.json(response))
+        .catch(err => 
+            { console.error(err)
+            return res.status(404).json(err);})
+
     })
     app.get("/api/v1/genreIDs", (req, res) => {
         let { genre, searchterm } = req.query
