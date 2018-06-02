@@ -7,6 +7,7 @@ const morgan = require("morgan")
 const cors = require("cors")
 const mysql = require('promise-mysql')
 const superagent = require('superagent')
+const path = require('path')
 //the first environment variable is local to Heroku, the second is in a local .env file for development
 const databaseUrl = process.env.CLEARDB_DATABASE_URL || process.env.LOCAL_DATABASE_URL
 const dataLoader = require("../lib/dataLoader.js")
@@ -28,6 +29,10 @@ function initializeApp(dataLoader) {
     app.use(bodyParser.json())
 
     app.get('/', (req, res) => res.send("You have reached the Montreal Artist Database back-end. Try an endpoint!"))
+    
+    app.get('/loaderio-ee04499ec7f65cd4627501a0ab3abbd8/', (req,res)=>{
+        res.sendFile(path.join(__dirname + '../lib/loaderconfirmation.txt'))
+    })
 
     app.post('/api/v1/newsletter-subscribe',(req,res)=>{
         let email = req.body.email
