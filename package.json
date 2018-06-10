@@ -5,18 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/real_server.js"
+    "start": "node server/real_server.js",
+    "dev-start": "nodemon server/real_server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scharfsilentc/mtl-artist-database-backend.git"
+    "url": "git+https://github.com/bashunaimiroy/mad-backend.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/scharfsilentc/mtl-artist-database-backend/issues"
+    "url": "https://github.com/bashunaimiroy/mad-backend.git/issues"
   },
-  "homepage": "https://github.com/scharfsilentc/mtl-artist-database-backend#readme",
+  "homepage": "https://github.com/bashunaimiroy/mad-backend#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
