@@ -11,14 +11,16 @@ const path = require('path')
 //the first environment variable is local to Heroku, the second is in a local .env file for development
 const databaseUrl = process.env.CLEARDB_DATABASE_URL || process.env.LOCAL_DATABASE_URL
 const dataLoader = require("../lib/dataLoader.js")
-console.log(process.env)
 console.log("database URL is", databaseUrl, ". connecting now")
 
-//this next part first makes the connection to the database, 
-//then instantiates the dataLoader with that connection,
+//this next part first makes a connection pool to the database, 
+//then instantiates the dataLoader with that pool,
+// so the dataLoader can use pool.query
+// (which is shorthand for: make a connection, query, close connection)
 // then finally initialises the Express server.
-const connection = mysql.createConnection(databaseUrl)
-    .then(connection => initializeApp(new dataLoader(connection)))
+const pool = mysql.createPool(databaseUrl)
+
+initializeApp(new dataLoader(pool));
 
 function initializeApp(dataLoader) {
     console.log("starting server.")
@@ -29,13 +31,12 @@ function initializeApp(dataLoader) {
     app.use(bodyParser.json())
 
     app.get('/', (req, res) => res.send("You have reached the Montreal Artist Database back-end. Try an endpoint!"))
-    
-    app.get('/loaderio-ee04499ec7f65cd4627501a0ab3abbd8/', (req,res)=>{
-        res.sendFile(path.join(__dirname + '/../lib/loaderconfirmation.txt'))
-    })
+
 
     app.post('/api/v1/newsletter-subscribe',(req,res)=>{
         let email = req.body.email
+        console.log('received the email:', email, '. Subscribing them to the mailing list');
+        
         superagent.post('https://us18.api.mailchimp.com/3.0/lists/06f3863bc7/members')
         .send(
             {email_address:email,status:'subscribed'}
@@ -43,7 +44,7 @@ function initializeApp(dataLoader) {
         .auth('mad-backend','0839fa0ca24ab9e2c3b10bcc5713bb91-us18')
         .then(response=>res.json(response))
         .catch(err => 
-            { console.error(err)
+            { console.error('error subscribing:',err)
             return res.status(404).json(err);})
 
     })
@@ -104,5 +105,5 @@ function initializeApp(dataLoader) {
     })
 
 
-    app.listen(process.env.PORT || 3005, () => console.log('Server is live!'))
+    app.listen(process.env.PORT || 3005, () => console.log('Server is live and taking requests!'))
 }
