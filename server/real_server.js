@@ -60,6 +60,7 @@ function initializeApp(dataLoader) {
 
             })
     })
+
     app.get("/api/v1/bandData", (req, res) => {
         console.log("Received request for data on band with ID:", req.query.band_id)
         dataLoader.getSingleBand(req.query.band_id).then(bandObj => {
@@ -96,6 +97,18 @@ function initializeApp(dataLoader) {
                 res.status(200).json({insertedId:id})
             })
             .catch(err => { console.error(err); res.status(500).send("Band submission failed. Please contact the webmaster.") })
+    })
+
+    app.get("/api/v1/pendingIDs", (req,res) => {
+        console.log('receiving request for pending band IDs.')
+        dataLoader.getPendingIDs().then(bandIdArray => res.status(200).json(bandIdArray))
+            .catch(err => {
+                console.log(`error retrieving pending IDs: 
+                ${err.code} ${err.sqlMessage} 
+                SQL query was ${err.sql}`);
+                return res.status(500).json("Error retrieving pending IDs. Sorry")
+
+            })
     })
 
     //this is our error Handler Middleware
