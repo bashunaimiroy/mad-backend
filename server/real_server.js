@@ -111,6 +111,19 @@ function initializeApp(dataLoader) {
             })
     })
 
+    app.get("/api/v1/adminBandData", (req, res) => {
+        console.log("Received request for admin data on band with ID:", req.query.band_id)
+        dataLoader.adminGetSingleBand(req.query.band_id).then(bandObj => {
+            console.log("Admin band data object retrieved. Name is ", bandObj[0].band_name)
+            return res.status(200).json(bandObj)
+        }).catch(err => {
+            console.log(`error retrieving Admin band data object: 
+            ${err.code} ${err.sqlMessage} 
+            SQL query was ${err.sql}`)
+            return res.status(500).json("Error retrieving band data. Sorry")
+        })
+    })
+
     //this is our error Handler Middleware
     app.use(function (err, req, res, next) {
         console.log(err)
