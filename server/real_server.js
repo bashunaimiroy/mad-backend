@@ -99,7 +99,7 @@ function initializeApp(dataLoader) {
             .catch(err => { console.error(err); res.status(500).send("Band submission failed. Please contact the webmaster.") })
     })
 
-    app.get("/api/v1/pendingIDs", (req,res) => {
+    app.get("/api/v1/admin/pendingIDs", (req,res) => {
         console.log('receiving request for pending band IDs.')
         dataLoader.getPendingIDs().then(bandIdArray => res.status(200).json(bandIdArray))
             .catch(err => {
@@ -111,7 +111,7 @@ function initializeApp(dataLoader) {
             })
     })
 
-    app.get("/api/v1/adminBandData", (req, res) => {
+    app.get("/api/v1/admin/bandData", (req, res) => {
         console.log("Received request for admin data on band with ID:", req.query.band_id)
         dataLoader.adminGetSingleBand(req.query.band_id).then(bandObj => {
             console.log("Admin band data object retrieved. Name is ", bandObj[0].band_name)
@@ -123,6 +123,27 @@ function initializeApp(dataLoader) {
             return res.status(500).json("Error retrieving band data. Sorry")
         })
     })
+
+    app.post("/api/v1/admin/approveBand", (req, res) => {
+        console.log("received approval for band with ID #", req.body.band_id)
+        dataLoader.approveBand(req.body.band_id)
+            .then(id => {
+                console.log("band approved. ID is ", id);
+                res.status(200).json({updatedID:id})
+            })
+            .catch(err => { console.error(err); res.status(500).send("Band submission failed. Please contact the webmaster.") })
+    })
+
+    app.post("/api/v1/admin/editBand", (req, res) => {
+        console.log("received edit for band with ID #", req.body.band_id)
+        dataLoader.editBand(req.body.bandObj)
+            .then(id => {
+                console.log("band edited. ID is ", id);
+                res.status(200).json({updatedID:id})
+            })
+            .catch(err => { console.error(err); res.status(500).send("Band submission failed. Please contact the webmaster.") })
+    })
+
 
     //this is our error Handler Middleware
     app.use(function (err, req, res, next) {
