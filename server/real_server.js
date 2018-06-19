@@ -135,8 +135,8 @@ function initializeApp(dataLoader) {
     })
 
     app.post("/api/v1/admin/editBand", (req, res) => {
-        console.log("received edit for band with ID #", req.body.bandObj.band_id)
-        dataLoader.editBand(req.body.bandObj)
+        console.log("received edit for band with ID #", req.body.band_id)
+        dataLoader.editBand(req.body.band_id,req.body.bandObj)
             .then(id => {
                 console.log("band edited. ID is ", id);
                 res.status(200).json({updatedID:id})
