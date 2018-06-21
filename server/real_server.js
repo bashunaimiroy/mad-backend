@@ -8,7 +8,7 @@ const cors = require("cors")
 const mysql = require('promise-mysql')
 const superagent = require('superagent')
 const path = require('path')
-const loggedInCheck = require('./lib/loggedInCheck.js')
+const loggedInCheck = require('../lib/loggedInCheck.js')
 //the first environment variable is local to Heroku, the second is in a local .env file for development
 const databaseUrl = process.env.CLEARDB_DATABASE_URL || process.env.LOCAL_DATABASE_URL
 const adminKey = process.env.ADMIN_KEY
