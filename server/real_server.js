@@ -150,6 +150,19 @@ function initializeApp(dataLoader) {
             .catch(err => { console.error(err); res.status(500).send("Band submission failed. Please contact the webmaster.") })
     })
 
+    app.delete("/api/v1/admin/deleteBand", loggedInCheck, (req,res) => {
+        console.log('received delete request for band with ID #', req.body.band_id)
+        dataLoader.deleteBand(req.body.band_id)
+        .then(response=>{
+            console.log('band deleted');
+            res.status(202).send()
+        })
+        .catch(err=>{
+            console.error('error deleting band:',err)
+            res.status(500).send("Band deletion failed. Please contact the webmaster")
+        })
+    })
+
 
     //this is our error Handler Middleware
     app.use(function (err, req, res, next) {
