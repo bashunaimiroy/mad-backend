@@ -8,8 +8,10 @@ const cors = require("cors")
 const mysql = require('promise-mysql')
 const superagent = require('superagent')
 const path = require('path')
+const loggedInCheck = require('./lib/loggedInCheck.js')
 //the first environment variable is local to Heroku, the second is in a local .env file for development
 const databaseUrl = process.env.CLEARDB_DATABASE_URL || process.env.LOCAL_DATABASE_URL
+const adminKey = process.env.ADMIN_KEY
 const dataLoader = require("../lib/dataLoader.js")
 console.log("database URL is", databaseUrl, ". connecting now")
 
@@ -31,7 +33,6 @@ function initializeApp(dataLoader) {
     app.use(bodyParser.json())
 
     app.get('/', (req, res) => res.send("You have reached the Montreal Artist Database back-end. Try an endpoint!"))
-
 
     app.post('/api/v1/newsletter-subscribe',(req,res)=>{
         let email = req.body.email
@@ -99,7 +100,12 @@ function initializeApp(dataLoader) {
             .catch(err => { console.error(err); res.status(500).send("Band submission failed. Please contact the webmaster.") })
     })
 
-    app.get("/api/v1/admin/pendingIDs", (req,res) => {
+    app.get("/api/v1/admin/authenticate",loggedInCheck,(req,res)=> {
+        console.log("authenticated the admin")
+        res.status(200).json({approved:true})
+    })
+
+    app.get("/api/v1/admin/pendingIDs",(req,res) => {
         console.log('receiving request for pending band IDs.')
         dataLoader.getPendingIDs().then(bandIdArray => res.status(200).json(bandIdArray))
             .catch(err => {
@@ -111,7 +117,7 @@ function initializeApp(dataLoader) {
             })
     })
 
-    app.get("/api/v1/admin/bandData", (req, res) => {
+    app.get("/api/v1/admin/bandData", loggedInCheck, (req, res) => {
         console.log("Received request for admin data on band with ID:", req.query.band_id)
         dataLoader.adminGetSingleBand(req.query.band_id).then(bandObj => {
             console.log("Admin band data object retrieved. Name is ", bandObj[0].band_name)
@@ -124,7 +130,7 @@ function initializeApp(dataLoader) {
         })
     })
 
-    app.post("/api/v1/admin/approveBand", (req, res) => {
+    app.post("/api/v1/admin/approveBand", loggedInCheck, (req, res) => {
         console.log("received approval for band with ID #", req.body.band_id)
         dataLoader.approveBand(req.body.band_id)
             .then(id => {
@@ -134,7 +140,7 @@ function initializeApp(dataLoader) {
             .catch(err => { console.error(err); res.status(500).send("Band submission failed. Please contact the webmaster.") })
     })
 
-    app.post("/api/v1/admin/editBand", (req, res) => {
+    app.post("/api/v1/admin/editBand", loggedInCheck, (req, res) => {
         console.log("received edit for band with ID #", req.body.band_id)
         dataLoader.editBand(req.body.band_id,req.body.bandObj)
             .then(id => {
