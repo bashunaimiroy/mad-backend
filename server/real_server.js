@@ -51,8 +51,23 @@ function initializeApp(dataLoader) {
     })
     app.get("/api/v1/genreIDs", (req, res) => {
         let { genre, searchterm } = req.query
+        let responseObject = {}
         console.log("band_IDs requested. Genre:", genre, "searchterm:", searchterm);
-        dataLoader.getIDs(genre, searchterm).then(bandIdArray => res.status(200).json(bandIdArray))
+        dataLoader.getIDs(genre, searchterm)
+        .then(response => 
+            {
+                // responseObject.bandIdArray = bandIdArray;
+            res.status(200).json(response)
+            // return dataLoader.getSubGenres(genre,searchterm)}  
+            }              
+        )
+        // .then(
+        //     bandSubGenreArray => { 
+        //         responseObject.bandSubGenreArray = bandSubGenreArray;
+        //         res.status(200).json(responseObject)
+        //     }
+
+        // )
             .catch(err => {
                 console.log(`error retrieving IDs: 
                 ${err.code} ${err.sqlMessage} 
